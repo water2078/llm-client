@@ -4,6 +4,9 @@ from open_webui.utils.misc import (
 )
 
 from typing import Callable, Optional
+import tiktoken
+
+encoding = tiktoken.get_encoding("cl100k_base")
 
 
 # inplace function: form_data is modified

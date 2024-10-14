@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 import aiohttp
 import requests
 from open_webui.apps.webui.models.models import Models
+from open_webui.apps.webui.models.usages import Usages
 from open_webui.config import (
     CORS_ALLOW_ORIGIN,
     ENABLE_MODEL_FILTER,
@@ -39,6 +40,7 @@ from open_webui.utils.payload import (
     apply_model_params_to_body_ollama,
     apply_model_params_to_body_openai,
     apply_model_system_prompt_to_body,
+    encoding,
 )
 from open_webui.utils.utils import get_admin_user, get_verified_user
 
@@ -825,10 +827,14 @@ async def generate_chat_completion(
     url = get_ollama_url(url_idx, payload["model"])
     log.info(f"url: {url}")
     log.debug(payload)
+    model_name = payload["model"]
+    payload = json.dumps(payload)
+    token_count = len(encoding.encode(payload))
+    _ret = Usages.insert_new_usage(user.id, model_name, token_count)
 
     return await post_streaming_url(
         f"{url}/api/chat",
-        json.dumps(payload),
+        payload,
         stream=form_data.stream,
         content_type="application/x-ndjson",
     )

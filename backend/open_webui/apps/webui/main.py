@@ -18,6 +18,7 @@ from open_webui.apps.webui.routers import (
     prompts,
     tools,
     users,
+    usages,
     utils,
 )
 from open_webui.apps.webui.utils import load_function_module_by_id
@@ -109,6 +110,7 @@ app.add_middleware(
 app.include_router(configs.router, prefix="/configs", tags=["configs"])
 app.include_router(auths.router, prefix="/auths", tags=["auths"])
 app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(usages.router, prefix="/usages", tags=["usages"])
 app.include_router(chats.router, prefix="/chats", tags=["chats"])
 
 app.include_router(models.router, prefix="/models", tags=["models"])

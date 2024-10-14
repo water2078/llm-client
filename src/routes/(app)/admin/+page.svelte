@@ -17,8 +17,10 @@
 	import ChatBubbles from '$lib/components/icons/ChatBubbles.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import UserChatsModal from '$lib/components/admin/UserChatsModal.svelte';
+	import UserUsagesModal from '$lib/components/admin/UserUsagesModal.svelte';
 	import AddUserModal from '$lib/components/admin/AddUserModal.svelte';
 	import ConfirmDialog from '$lib/components/common/ConfirmDialog.svelte';
+	import Clipboard from '$lib/components/icons/Clipboard.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -35,6 +37,7 @@
 	let showAddUserModal = false;
 
 	let showUserChatsModal = false;
+	let showUserUsagesModal = false;
 	let showEditUserModal = false;
 
 	const updateRoleHandler = async (id, role) => {
@@ -115,7 +118,7 @@
 	}}
 />
 <UserChatsModal bind:show={showUserChatsModal} user={selectedUser} />
-
+<UserUsagesModal bind:show={showUserUsagesModal} user={selectedUser} />
 {#if loaded}
 	<div class="mt-0.5 mb-3 gap-1 flex flex-col md:flex-row justify-between">
 		<div class="flex md:self-center text-lg font-medium px-0.5">
@@ -317,6 +320,17 @@
 											}}
 										>
 											<ChatBubbles />
+										</button>
+									</Tooltip>
+									<Tooltip content={$i18n.t('Usages')}>
+										<button
+											class="self-center w-fit text-sm px-2 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-xl"
+											on:click={async () => {
+												showUserUsagesModal = !showUserUsagesModal;
+												selectedUser = user;
+											}}
+										>
+											<Clipboard />
 										</button>
 									</Tooltip>
 								{/if}

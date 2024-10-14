@@ -8,6 +8,7 @@ from typing import Literal, Optional, overload
 import aiohttp
 import requests
 from open_webui.apps.webui.models.models import Models
+from open_webui.apps.webui.models.usages import Usages
 from open_webui.config import (
     CACHE_DIR,
     CORS_ALLOW_ORIGIN,
@@ -31,6 +32,7 @@ from starlette.background import BackgroundTask
 from open_webui.utils.payload import (
     apply_model_params_to_body_openai,
     apply_model_system_prompt_to_body,
+    encoding,
 )
 
 from open_webui.utils.utils import get_admin_user, get_verified_user
@@ -429,7 +431,8 @@ async def generate_chat_completion(
     payload = json.dumps(payload)
 
     log.debug(payload)
-
+    token_count = len(encoding.encode(payload))
+    _ret = Usages.insert_new_usage(user.id, model, token_count)
     headers = {}
     headers["Authorization"] = f"Bearer {key}"
     headers["Content-Type"] = "application/json"

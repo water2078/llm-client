@@ -2,6 +2,8 @@ from logging.config import fileConfig
 
 from alembic import context
 from open_webui.apps.webui.models.auths import Auth
+from open_webui.apps.webui.models.usages import Usage
+
 from open_webui.env import DATABASE_URL
 from sqlalchemy import engine_from_config, pool
 
@@ -19,7 +21,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Auth.metadata
-
+target_metadata = Usage.metadata
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
@@ -76,6 +78,8 @@ def run_migrations_online() -> None:
 
 
 if context.is_offline_mode():
+    print("run online migration")
     run_migrations_offline()
 else:
+    print("run offline migration")
     run_migrations_online()
